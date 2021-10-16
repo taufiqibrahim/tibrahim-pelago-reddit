@@ -66,7 +66,7 @@ class RedditTopNHotPostIngestion(RedditIngestion):
         clean_records = [(
             r.id,
             r.title,
-            i,
+            i + 1,
             datetime.fromtimestamp(r.created),
             r.url,
             r.selftext,
