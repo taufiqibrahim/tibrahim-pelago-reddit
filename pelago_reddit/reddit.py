@@ -66,6 +66,7 @@ class RedditTopNHotPostIngestion(RedditIngestion):
         clean_records = [(
             r.id,
             r.title,
+            i,
             datetime.fromtimestamp(r.created),
             r.url,
             r.selftext,
@@ -74,12 +75,13 @@ class RedditTopNHotPostIngestion(RedditIngestion):
             r.author_premium,
             r.over_18,
             json.dumps(r.treatment_tags),
-        ) for r in records]
+            datetime.utcnow().replace(minute=0, second=0, microsecond=0), # schedule timestamp
+        ) for i, r in enumerate(records)]
 
         return clean_records
 
     def write_to_db(self, records: list):
-        insert_stmt = "INSERT INTO hot_posts (id, title, created, url, selftext, upvote_ratio, author, author_premium, over_18, treatment_tags) VALUES %s;"
+        insert_stmt = "INSERT INTO hot_posts (id, title, rank, created, url, selftext, upvote_ratio, author, author_premium, over_18, treatment_tags, _scheduled_ts) VALUES %s;"
         conn = self._get_db_connection()
         with conn.cursor() as cursor:
             psycopg2.extras.execute_values(cursor, insert_stmt, records)
