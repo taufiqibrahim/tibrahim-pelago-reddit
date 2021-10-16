@@ -33,7 +33,7 @@ create table hot_posts (
 	seqval bigserial primary key,
 	id text,
 	title text,
-	"rank" int,							--rank value for each period, avoid writing additional SQL
+	"rank" int,
 	created timestamp,
 	url text,
 	selftext text,
@@ -42,8 +42,8 @@ create table hot_posts (
 	author_premium boolean,
 	over_18 boolean,
 	treatment_tags jsonb,
-	_scheduled_ts timestamp,			--schedule timestamp
-	_ingest_ts timestamp default now()	--ingestion timestamp
+	_scheduled_ts timestamp,
+	_ingest_ts timestamp default now()
 );
 ```
 
