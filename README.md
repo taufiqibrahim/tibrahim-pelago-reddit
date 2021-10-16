@@ -13,7 +13,6 @@ For now on, I'll skip the whole task because I don't really know what Reddit is.
 - [x] Learn about Reddit and sign up
 - [x] Explore how to use [PRAW](https://praw.readthedocs.io/en/stable/getting_started/quick_start.html) API
 - [x] Explore API response, get the data model/schema
-- [ ] Quick explore on deployment infrastructure
 
 ## What is Reddit?
 Based on Reddit Help page:
@@ -25,12 +24,11 @@ So, I am going to get data from [r/aws](https://www.reddit.com/r/aws/) subreddit
 Before going further, I need to create Reddit account to access Reddit API. We will obtain and use Reddit Client ID & Client Secret. I follow the [First Steps Guide](https://github.com/reddit/reddit/wiki/OAuth2-Quick-Start-Example#first-steps) to create them.
 
 Go to my [app preferences](https://www.reddit.com/prefs/apps). Click the "Create app" or "Create another app" button. Fill out the form like so:
-
-name: My Example App
-App type: Choose the script option
-description: You can leave this blank
-about url: You can leave this blank
-redirect url: http://www.example.com/unused/redirect/uri (We won't be using this as a redirect)
+- name: My Example App
+- App type: Choose the script option
+- description: You can leave this blank
+- about url: You can leave this blank
+- redirect url: http://www.example.com/unused/redirect/uri (We won't be using this as a redirect)
 
 ## Create AWS Lambda Security Group
 - `ServerlessSG`
@@ -38,6 +36,28 @@ redirect url: http://www.example.com/unused/redirect/uri (We won't be using this
 ## Create Database
 - AWS RDS Postgres `db.t3.micro`
 - Allow inbound from `ServerlessSG` 
+
+Create `hot_posts` table using SQL:
+```sql
+create table hot_posts (
+	seqval bigserial primary key,
+	id text,
+	title text,
+	"rank" int,
+	created timestamp,
+	url text,
+	selftext text,
+	upvote_ratio decimal(5,2),
+	author text,
+	author_premium boolean,
+	over_18 boolean,
+	treatment_tags jsonb,
+	__ts_ms timestamp default now()
+);
+```
+
+## Architecture
+![](architecture.png "Architecture")
 
 ## Deployment
 ### AWS Lambda + Serverless Framework
@@ -62,4 +82,6 @@ serverless print --stage dev
 serverless info --stage dev
 # deploy
 serverless deploy --stage dev
+# remove
+serverless remove --stage dev
 ```

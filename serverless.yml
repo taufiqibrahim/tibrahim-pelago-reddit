@@ -37,11 +37,9 @@ package:
 # you can put your functions here
 functions:
   topNHotPostIngestion:
-    handler: pelago_reddit/topNHotPostIngestion.main
+    handler: pelago_reddit/top_n_hot_post_ingestion.main
     events:
       - schedule:
           rate: cron(0 * * * ? *)
           enabled: true
-    environment: # Function level environment variables
-      SERVICE: ${self:service.name}-${opt:stage}-topNHotPostIngestion
     package: {}
