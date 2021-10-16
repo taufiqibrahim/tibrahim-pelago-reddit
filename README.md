@@ -7,28 +7,18 @@ Pelago - Coding Challenge - Data Engineer
 3. Process and clean the data as required
 4. Insert top 100 HOT posts into the database table(s) on an hourly schedule from any subreddit of your choice
 
-### Breaking Down The Tasks
-For now on, I'll skip the whole task because I don't really know what Reddit is. So, I'll add several additional task to truly understand the business context.
-- [x] Create this [Github repo](https://github.com/taufiqibrahim/tibrahim-pelago-reddit) and start documentation
-- [x] Learn about Reddit and sign up
-- [x] Explore how to use [PRAW](https://praw.readthedocs.io/en/stable/getting_started/quick_start.html) API
-- [x] Explore API response, get the data model/schema
+## Architecture
+![](architecture.png "Architecture")
 
-## What is Reddit?
-Based on Reddit Help page:
-- Reddit is home to thousands of communities, endless conversation, and authentic human connection. Whether you're into breaking news, sports, TV fan theories, or a never-ending stream of the internet's cutest animals, there's a community on Reddit for you.
-- Reddit is a large community made up of thousands of smaller communities. These smaller, sub-communities within Reddit are also known as __subreddits__ and are created and moderated by redditors like you.
-
-So, I am going to get data from [r/aws](https://www.reddit.com/r/aws/) subreddit.
-
-Before going further, I need to create Reddit account to access Reddit API. We will obtain and use Reddit Client ID & Client Secret. I follow the [First Steps Guide](https://github.com/reddit/reddit/wiki/OAuth2-Quick-Start-Example#first-steps) to create them.
-
-Go to my [app preferences](https://www.reddit.com/prefs/apps). Click the "Create app" or "Create another app" button. Fill out the form like so:
-- name: My Example App
-- App type: Choose the script option
-- description: You can leave this blank
-- about url: You can leave this blank
-- redirect url: http://www.example.com/unused/redirect/uri (We won't be using this as a redirect)
+Design choices:
+- I choose AWS Lambda + Serverless framework for below reasons:
+    - No infrastructure/hardware to manage
+    - Built-in scheduler (Eventbridge)
+    - Logging provided (Cloudwatch)
+    - Very low cost
+    - Serverless framework to take care the deployment
+- EC2 with cron option will add burden such as cost, logging and managing EC2 itself
+- Workflow orchestration such as Apache Airflow will be overkill for this task
 
 ## Create AWS Lambda Security Group
 - `ServerlessSG`
@@ -57,8 +47,11 @@ create table hot_posts (
 );
 ```
 
-## Architecture
-![](architecture.png "Architecture")
+Most fields are mandatory from the assignment. I added:
+- `seqval` as auto increment integer
+- `rank` for accurate post rank and avoid additional query. Without this we will need to use SQL window function such as `ROW_NUMBER() OVER(...)` to get the rank.
+- `_scheduled_ts` is the schedule timestamp
+- `_ingest_ts` is the timestamp reflecting when the data is written into the database.
 
 ## Deployment
 ### AWS Lambda + Serverless Framework
