@@ -1,0 +1,16 @@
+{
+    "AWS_S3_DEPLOYMENT_BUCKET": "your-serverless-deployment",
+    "AWS_LAMBDA_EXECUTION_ROLE": "aws_lambda_execution_role_arn",
+    "AWS_LAMBDA_EXECUTION_TIMEOUT": "60",
+    "REDDIT_CLIENT_ID": "REDDIT_CLIENT_ID",
+    "REDDIT_CLIENT_SECRET": "REDDIT_CLIENT_SECRET",
+    "REDDIT_REDIRECT_URI": "http://www.example.com/unused/redirect/uri",
+    "REDDIT_USER_AGENT": "testscript by u/InternationalBend477",
+    "PG_HOST": "PG_HOST",
+    "PG_PORT": "PG_PORT",
+    "PG_DATABASE": "PG_DATABASE",
+    "PG_USER": "PG_USER",
+    "PG_PASSWORD": "PG_PASSWORD",
+    "SUBREDDIT_NAME": "SUBREDDIT_NAME",
+    "LIMIT": "LIMIT"
+}

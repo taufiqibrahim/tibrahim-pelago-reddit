@@ -64,6 +64,8 @@ create table hot_posts (
 ### AWS Lambda + Serverless Framework
 
 Prerequisite:
+
+Install serverless framework.
 ```bash
 # install serverless framework
 npm install -g serverless
@@ -71,6 +73,8 @@ npm install -g serverless
 # install dependencies from package.json
 npm install
 ```
+
+Create `env.dev.json` based on `env_example.json` and change value as required.
 
 Create AWS Lambda IAM role called `ServerlessLambdaExecutionRole` using `AWSLambdaBasicExecutionRole`. Copy and paste the ARN into `env.json`.
 
